@@ -1,31 +1,52 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable no-unused-vars */
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useState } from "react";
+import WishListForm from "../forms/WishListForm";
+import { useDispatch } from "react-redux";
+import { addWishlistItem } from "../../../features/state/wishlist/wishlistSlice";
 
-function WishlistModal() {
-  let [isOpen, setIsOpen] = useState(false);
+function WishlistModal(props) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [isSvgClicked, setIsSvgClicked] = useState(false);
+  const dispatch = useDispatch();
 
   function closeModal() {
     setIsOpen(false);
   }
 
-  function openModal() {
-    setIsOpen(true);
-  }
+  const svgStyle = {
+    transition: "fill 0.3s ease",
+    fill: isSvgClicked ? "red" : "rgba(0, 0, 0, 0.5)",
+  };
+
+  const handleSvgClick = () => {
+    setIsSvgClicked((prev) => !prev);
+  };
+
 
   return (
     <>
       <button
         type="button"
         className="absolute top-0 right-0 pt-3"
-        onClick={openModal}
+        onClick={() =>
+          dispatch(
+            addWishlistItem({
+              wishlistId: props.item.id,
+              item: props.item,
+            })
+          )
+        }
       >
-        <svg
+       <svg
           xmlns="http://www.w3.org/2000/svg"
-          fill="rgba(0, 0, 0, 0.5)"
+          style={svgStyle}
           viewBox="0 0 24 24"
           strokeWidth={1.5}
           stroke="white"
-          className="w-8 h-7 mr-2"
+          className={`w-8 h-7 mr-2 ${isSvgClicked ? "text-red-500" : ""}`}
+          onClick={handleSvgClick}
         >
           <path
             strokeLinecap="round"
@@ -80,9 +101,7 @@ function WishlistModal() {
                   </div>
                 </div>
 
-                <div className="flex justify-between">
-                  {/* Your language buttons here */}
-                </div>
+                <WishListForm />
               </Dialog.Panel>
             </Transition.Child>
           </div>
@@ -93,6 +112,3 @@ function WishlistModal() {
 }
 
 export default WishlistModal;
-
-
-

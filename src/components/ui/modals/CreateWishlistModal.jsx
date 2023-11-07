@@ -1,19 +1,37 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable no-unused-vars */
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useState } from "react";
+import WishListForm from "../forms/WishListForm";
+import CreateButton from "../buttons/CreateButton";
+import ClearButton from "../buttons/ClearButton";
+import { useDispatch } from "react-redux";
+import { addWishlistItem } from "../../../features/state/wishlist/wishlistSlice";
 
-function CreateWishlistModal() {
-  let [isOpen, setIsOpen] = useState(false);
-
-  function closeModal() {
-    setIsOpen(false);
-  }
+function CreateWishlistModal(props) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [isSvgClicked, setIsSvgClicked] = useState(false);
+  const dispatch = useDispatch();
 
   function openModal() {
     setIsOpen(true);
   }
 
+  function closeModal() {
+    setIsOpen(false);
+  }
+
+  const svgStyle = {
+    transition: "fill 0.3s ease",
+    fill: isSvgClicked ? "red" : "rgba(0, 0, 0, 0.5)",
+  };
+
+  const handleSvgClick = () => {
+    setIsSvgClicked((prev) => !prev);
+  };
+
   return (
-    <>
+    <div>
       <button
         type="button"
         className="absolute top-0 right-0 pt-3"
@@ -21,11 +39,12 @@ function CreateWishlistModal() {
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          fill="rgba(0, 0, 0, 0.5)"
+          style={svgStyle}
           viewBox="0 0 24 24"
           strokeWidth={1.5}
           stroke="white"
-          className="w-8 h-7 mr-2"
+          className={`w-8 h-7 mr-2 ${isSvgClicked ? "text-red-500" : ""}`}
+          onClick={handleSvgClick}
         >
           <path
             strokeLinecap="round"
@@ -41,17 +60,19 @@ function CreateWishlistModal() {
           className="fixed inset-0 z-10 overflow-y-auto"
           onClose={closeModal}
         >
+          <Dialog.Overlay className="fixed inset-0 bg-black opacity-50" />
+
           <div className="min-h-screen flex items-center justify-center">
             <Transition.Child
               as={Fragment}
               enter="ease-out duration-300"
-              enterFrom="opacity-0 scale-95"
-              enterTo="opacity-100 scale-100"
+              enterFrom="transform opacity-0 translate-y-full"
+              enterTo="transform opacity-100 translate-y-0"
               leave="ease-in duration-200"
-              leaveFrom="opacity-100 scale-100"
-              leaveTo="opacity-0 scale-95"
+              leaveFrom="opacity-100"
+              leaveTo="opacity-0"
             >
-              <Dialog.Panel className="w-full max-w-lg max-h-80 transform rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+              <Dialog.Panel className="w-full max-w-xl h-[250px] transform rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                 <div className="flex items-center justify-between mb-4">
                   <button
                     type="button"
@@ -80,23 +101,26 @@ function CreateWishlistModal() {
                   </div>
                 </div>
 
-                <div className="flex justify-between">
-                  <div className="w-full">
-                    <form>
-                      <input
-                        className="w-full p-2 border border-gray-300 rounded-md"
-                        placeholder="Name"
-                      />
-                      <div></div>
-                    </form>
-                  </div>
+                <WishListForm />
+                <div className="flex justify-between pt-14">
+                  <ClearButton />
+                  <CreateButton
+                    onClick={() =>
+                      dispatch(
+                        addWishlistItem({
+                          wishlistId: props.item.id,
+                          item: props.item,
+                        })
+                      )
+                    }
+                  />
                 </div>
               </Dialog.Panel>
             </Transition.Child>
           </div>
         </Dialog>
       </Transition>
-    </>
+    </div>
   );
 }
 

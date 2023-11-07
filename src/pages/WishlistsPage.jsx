@@ -1,16 +1,17 @@
+import { useSelector } from "react-redux";
 import Navbar from "../components/layout/Navbar";
+import EmptyWishlistMessage from "../components/ui/messages/EmptyWishlistMessage";
 import WishLists from "../components/wishlist/Wishlists";
 
+function WishlistsPage() {
+  const emptyFlag = useSelector((state) => state.wishlist.isEmpty);
 
- function WishlistsPage() {
   return (
-   <section>
-   
-    <Navbar />
-    <h1 className="font-semibold text-4xl pl-16 my-6">Wishlists</h1>
-    <WishLists />
-   </section>
-  )
+    <section>
+      <Navbar />
+      {emptyFlag ? <EmptyWishlistMessage /> : <WishLists />}
+    </section>
+  );
 }
 
 export default WishlistsPage;

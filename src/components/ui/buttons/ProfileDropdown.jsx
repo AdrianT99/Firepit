@@ -1,14 +1,16 @@
-import React, { Fragment } from "react";
+import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { useDispatch } from "react-redux";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import { logOut } from "../../../features/state/user/userSlice";
+import { Link} from "react-router-dom";
+
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-function ProfileDropdown(props) {
+function ProfileDropdown() {
   const dispatch = useDispatch();
 
   return (
@@ -50,7 +52,7 @@ function ProfileDropdown(props) {
             <Menu.Item>
               {({ active }) => (
                 <a
-                  href="#"
+           
                   className={classNames(
                     active ? "bg-gray-100 text-gray-900" : "text-gray-700",
                     "block px-4 py-2 text-sm"
@@ -62,15 +64,15 @@ function ProfileDropdown(props) {
             </Menu.Item>
             <Menu.Item>
               {({ active }) => (
-                <a
-                  href="#"
+                <Link
+                 to="wishlists"
                   className={classNames(
                     active ? "bg-gray-100 text-gray-900" : "text-gray-700",
                     "block px-4 py-2 text-sm"
                   )}
                 >
                   Wishlists
-                </a>
+                </Link>
               )}
             </Menu.Item>
           </div>
@@ -78,7 +80,7 @@ function ProfileDropdown(props) {
             <Menu.Item>
               {({ active }) => (
                 <a
-                  href="#"
+            
                   className={classNames(
                     active ? "bg-gray-100 text-gray-900" : "text-gray-700",
                     "block px-4 py-2 text-sm"
@@ -90,15 +92,15 @@ function ProfileDropdown(props) {
             </Menu.Item>
             <Menu.Item>
               {({ active }) => (
-                <a
-                  href="#"
+                <Link
+                  to="/wishlists"
                   className={classNames(
                     active ? "bg-gray-100 text-gray-900" : "text-gray-700",
                     "block px-4 py-2 text-sm"
                   )}
                 >
                   Help Center
-                </a>
+                </Link>
               )}
             </Menu.Item>
           </div>
@@ -106,7 +108,7 @@ function ProfileDropdown(props) {
             <Menu.Item>
               {({ active }) => (
                 <a
-                  href="#"
+                  
                   className={classNames(
                     active ? "bg-gray-100 text-gray-900" : "text-gray-700",
                     "block px-4 py-2 text-sm"

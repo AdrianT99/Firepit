@@ -13,4 +13,4 @@ const listingSlice = createSlice({
     }
 })
 
-export default listingSlice.reducer
+export default listingSlice.reducer;

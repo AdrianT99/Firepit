@@ -1,30 +1,52 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    wishLists: [{
-        id: 1,
-        name: "Beach 2023",
-        collection: "1 saved",
-        list: [{
-            id: 1,
-            image: 'https://maramar.us/wp-content/uploads/2017/11/Santa-Teresa-Villas-Lots-for-sale-MARAMAR-inside.jpg',
-            location: 'Santa Teresa, Costa Rica',
-            distance: `100 kilometers away`,
-            dates: 'May 15 - May 20, 2023',
-            price: '$150/night',
-        }]
-    }]
+  wishLists: [
+    // {
+    // id: 1,
+    // name: "Beach 2023",
+    // list: []
+    // }
+  ],
+  isEmpty: true,
+  currentList: 1,
 };
 
 const wishlistSlice = createSlice({
-    name: "wishlist",
-    initialState: initialState,
-    reducers: {
-        addWishlist: (state, action) => {
-            state.wishLists.push(action.payload)
-        },
-    }
+  name: "wishlist",
+  initialState: initialState,
+  reducers: {
+    addWishlistItem: (state, action) => {
+      const { item } = action.payload;
+      const currentWishlist = state.wishLists.find(
+        (w) => w.id === state.currentList
+      );
+
+      if (currentWishlist) {
+        currentWishlist.list.push(item);
+        console.log(state.wishLists);
+      } else {
+        state.wishLists.push({
+          id: state.currentList,
+          name: `Wishlist ${state.currentList}`,
+          list: [item],
+        });
+        console.log("Reducer: After adding item");
+      }
+
+      state.isEmpty = false;
+    },
+    removeWishlistItem: (state, action) => {
+      const { wishlistId, itemId } = action.payload;
+      const wishlist = state.wishLists.find((w) => w.id === wishlistId);
+
+      if (wishlist) {
+        wishlist.list = wishlist.list.filter((item) => item.id !== itemId);
+        state.isEmpty = wishlist.list.length === 0;
+      }
+    },
+  },
 });
 
 export default wishlistSlice.reducer;
-export const { addWishlist } = wishlistSlice.actions;
+export const { addWishlistItem, removeWishlistItem } = wishlistSlice.actions;
